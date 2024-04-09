@@ -50,6 +50,15 @@ func NewClient(authToken string) *Client {
 	return NewClientWithConfig(config)
 }
 
+// NewClientWithHttp creates new OpenAI API client with custom http client.
+func NewClientWithHttp(authToken string, httpcli *http.Client) *Client {
+	config := DefaultConfig(authToken)
+	if httpcli != nil {
+		config.HTTPClient = httpcli
+	}
+	return NewClientWithConfig(config)
+}
+
 // NewClientWithConfig creates new OpenAI API client for specified config.
 func NewClientWithConfig(config ClientConfig) *Client {
 	return &Client{
