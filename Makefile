@@ -33,3 +33,8 @@ lint: ## Lint Go code with the installed golangci-lint
 	@ echo "▶️ golangci-lint run"
 	golangci-lint run $(LINT_TARGETS)
 	@ echo "✅ golangci-lint run"
+
+
+.PHONY: gci
+gci:
+	gci write -s standard -s default -s "prefix(github.com)" -s "prefix(github.com/tenz-io/go-openai)" --skip-generated *

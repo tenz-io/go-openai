@@ -1,13 +1,13 @@
 package openai //nolint:testpackage // testing private field
 
 import (
-	"github.com/sashabaranov/go-openai/internal/test"
-	"github.com/sashabaranov/go-openai/internal/test/checks"
-
 	"bytes"
 	"errors"
 	"os"
 	"testing"
+
+	"github.com/tenz-io/go-openai/internal/test"
+	"github.com/tenz-io/go-openai/internal/test/checks"
 )
 
 type failingWriter struct {
