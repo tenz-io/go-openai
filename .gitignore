@@ -17,3 +17,5 @@
 # Auth token for tests
 .openai-token
 .idea
+
+*.mp3
