@@ -44,14 +44,14 @@ type RawResponse struct {
 	httpHeader
 }
 
-// NewClient creates new OpenAI API client.
-func NewClient(authToken string) *Client {
+// NewClientWithDefault creates new OpenAI API client.
+func NewClientWithDefault(authToken string) *Client {
 	config := DefaultConfig(authToken)
 	return NewClientWithConfig(config)
 }
 
-// NewClientWithHttp creates new OpenAI API client with custom http client.
-func NewClientWithHttp(authToken string, httpcli *http.Client) *Client {
+// NewClient creates new OpenAI API client with custom http client.
+func NewClient(authToken string, httpcli *http.Client) *Client {
 	config := DefaultConfig(authToken)
 	if httpcli != nil {
 		config.HTTPClient = httpcli

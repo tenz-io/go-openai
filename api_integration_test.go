@@ -21,7 +21,7 @@ func TestAPI(t *testing.T) {
 	}
 
 	var err error
-	c := openai.NewClient(apiToken)
+	c := openai.NewClientWithDefault(apiToken)
 	ctx := context.Background()
 	_, err = c.ListEngines(ctx)
 	checks.NoError(t, err, "ListEngines error")
@@ -141,7 +141,7 @@ func TestAPIError(t *testing.T) {
 	}
 
 	var err error
-	c := openai.NewClient(apiToken + "_invalid")
+	c := openai.NewClientWithDefault(apiToken + "_invalid")
 	ctx := context.Background()
 	_, err = c.ListEngines(ctx)
 	checks.HasError(t, err, "ListEngines should fail with an invalid key")
