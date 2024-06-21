@@ -35,6 +35,13 @@ lint: ## Lint Go code with the installed golangci-lint
 	@ echo "✅ golangci-lint run"
 
 
+.PHONY: dep
+dep: ## Install dependencies
+	@ echo "▶️ go mod tidy"
+	go mod tidy -v
+	@ echo "✅ go mod tidy"
+
+
 .PHONY: gci
 gci:
 	gci write -s standard -s default -s "prefix(github.com)" -s "prefix(github.com/tenz-io/go-openai)" --skip-generated *
