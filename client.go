@@ -98,9 +98,9 @@ func withContentType(contentType string) requestOption {
 	}
 }
 
-func withBetaAssistantV1() requestOption {
+func withBetaAssistantVersion(version string) requestOption {
 	return func(args *requestOptions) {
-		args.header.Set("OpenAI-Beta", "assistants=v1")
+		args.header.Set("OpenAI-Beta", fmt.Sprintf("assistants=%s", version))
 	}
 }
 
@@ -138,12 +138,12 @@ func (c *Client) sendRequest(req *http.Request, v Response) error {
 
 	defer res.Body.Close()
 
-	if isFailureStatusCode(res) {
-		return c.handleErrorResp(res)
-	}
-
 	if v != nil {
 		v.SetHeader(res.Header)
+	}
+
+	if isFailureStatusCode(res) {
+		return c.handleErrorResp(res)
 	}
 
 	return decodeResponse(res.Body, v)
@@ -191,7 +191,7 @@ func sendRequestStream[T streamable](client *Client, req *http.Request) (*stream
 func (c *Client) setCommonHeaders(req *http.Request) {
 	// https://learn.microsoft.com/en-us/azure/cognitive-services/openai/reference#authentication
 	// Azure API Key authentication
-	if c.config.APIType == APITypeAzure {
+	if c.config.APIType == APITypeAzure || c.config.APIType == APITypeCloudflareAzure {
 		req.Header.Set(AzureAPIKeyHeader, c.config.authToken)
 	} else if c.config.authToken != "" {
 		// OpenAI or Azure AD authentication
@@ -255,7 +255,13 @@ func (c *Client) fullURL(suffix string, args ...any) string {
 		)
 	}
 
-	// c.config.APIType == APITypeOpenAI || c.config.APIType == ""
+	// https://developers.cloudflare.com/ai-gateway/providers/azureopenai/
+	if c.config.APIType == APITypeCloudflareAzure {
+		baseURL := c.config.BaseURL
+		baseURL = strings.TrimRight(baseURL, "/")
+		return fmt.Sprintf("%s%s?api-version=%s", baseURL, suffix, c.config.APIVersion)
+	}
+
 	return fmt.Sprintf("%s%s", c.config.BaseURL, suffix)
 }
 
