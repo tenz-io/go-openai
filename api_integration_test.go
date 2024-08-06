@@ -21,7 +21,7 @@ func TestAPI(t *testing.T) {
 	}
 
 	var err error
-	c := openai.NewClientWithDefault(apiToken)
+	c := openai.NewClient(apiToken)
 	ctx := context.Background()
 	_, err = c.ListEngines(ctx)
 	checks.NoError(t, err, "ListEngines error")
@@ -115,7 +115,7 @@ func TestCompletionStream(t *testing.T) {
 		t.Skip("Skipping testing against production OpenAI API. Set OPENAI_TOKEN environment variable to enable it.")
 	}
 
-	c := openai.NewClient(apiToken)
+	c := openai.NewClientWithHttpCli(apiToken)
 	ctx := context.Background()
 
 	stream, err := c.CreateCompletionStream(ctx, openai.CompletionRequest{
@@ -151,7 +151,7 @@ func TestAPIError(t *testing.T) {
 	}
 
 	var err error
-	c := openai.NewClientWithDefault(apiToken + "_invalid")
+	c := openai.NewClient(apiToken + "_invalid")
 	ctx := context.Background()
 	_, err = c.ListEngines(ctx)
 	checks.HasError(t, err, "ListEngines should fail with an invalid key")
